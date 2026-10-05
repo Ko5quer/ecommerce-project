@@ -13,7 +13,10 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        $products = Product::with('category')->get();
+        return inertia('Products/Index',[
+            'products'=>$products,
+        ]);
     }
 
     /**
@@ -22,6 +25,8 @@ class ProductController extends Controller
     public function create()
     {
         //
+        return inertia('Products/Create');
+
     }
 
     /**
@@ -30,6 +35,8 @@ class ProductController extends Controller
     public function store(StoreProductRequest $request)
     {
         //
+        Product::crete($request -> validated());
+        return redirect() -> route('products.index');
     }
 
     /**
@@ -38,6 +45,9 @@ class ProductController extends Controller
     public function show(Product $product)
     {
         //
+        return inertia('Products/Show',[
+            'product' => $product -> load('category'),
+        ]);
     }
 
     /**
@@ -46,6 +56,9 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         //
+        return inertia('Products/Edit',[
+            'product' => $product,
+        ]);
     }
 
     /**
@@ -54,6 +67,9 @@ class ProductController extends Controller
     public function update(UpdateProductRequest $request, Product $product)
     {
         //
+        $product -> update($request -> validated());
+        return redirect() -> route('products.index');
+
     }
 
     /**
@@ -62,5 +78,7 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         //
+        $product -> delete();
+        return redirect() -> route('products.index');
     }
 }
