@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
+use App\Models\Category;
 use App\Models\Product;
 
 class ProductController extends Controller
@@ -13,9 +14,9 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::with('category')->get();
+        $categories = Category::with('products')->get();
         return inertia('Products/Index',[
-            'products'=>$products,
+            'categories'=>$categories,
         ]);
     }
 
@@ -35,7 +36,13 @@ class ProductController extends Controller
     public function store(StoreProductRequest $request)
     {
         //
-        Product::crete($request -> validated());
+        $product = Product::create([
+            'product_name' => $request->product_name,
+            'description' => $request->description,
+            'product_price' => $request->product_price,
+            'current_stock' => $request->current_stock,
+            'category_id' => $request->category_id,
+        ]);
         return redirect() -> route('products.index');
     }
 
@@ -45,8 +52,10 @@ class ProductController extends Controller
     public function show(Product $product)
     {
         //
+        $product ->load('category');
+
         return inertia('Products/Show',[
-            'product' => $product -> load('category'),
+            'product' => $product,
         ]);
     }
 
@@ -67,7 +76,13 @@ class ProductController extends Controller
     public function update(UpdateProductRequest $request, Product $product)
     {
         //
-        $product -> update($request -> validated());
+         $product->update([
+            'product_name' => $request->product_name,
+            'description' => $request->description,
+            'product_price' => $request->product_price,
+            'current_stock' => $request->current_stock,
+            'category_id' => $request->category_id,
+        ]);
         return redirect() -> route('products.index');
 
     }
