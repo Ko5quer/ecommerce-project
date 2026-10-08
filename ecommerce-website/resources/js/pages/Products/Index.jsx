@@ -1,30 +1,43 @@
-export default function Index({ products }) {
+import { Link } from '@inertiajs/react';
+import './Index.css';
+
+export default function Index({ categories }) {
     return (
-        <div>
+        <div className="products-page">
             <h1>Products</h1>
 
-            <div className="products">
-                {products.map((product) => (
-                    <div className="product-card" key={product.id}>
+            {categories.map((category) => (
+                <section key={category.id} className="category-section">
 
-                        <img
-                            src={product.image}
-                            alt={product.product_name}
-                        />
+                    <h2>{category.name}</h2>
 
-                        <div>
-                            <h2>{product.product_name}</h2>
+                    <div className="products">
+                        {category.products.map((product) => (
+                            <Link
+                                href={`/products/${product.id}`}
+                                className="product-card"
+                                key={product.id}
+                            >
+                                <img
+                                    src={`/storage/${product.image}`}
+                                    alt={product.product_name}
+                                />
 
-                            <p>{product.category?.category_name}</p>
+                                <div className="product-info">
+                                    <h3>{product.product_name}</h3>
 
-                            <strong>R{product.product_price}</strong>
+                                    <strong>
+                                        R{product.product_price}
+                                    </strong>
 
-                            <button>Add to Cart</button>
-                        </div>
-
+                                    <button>Add to Cart</button>
+                                </div>
+                            </Link>
+                        ))}
                     </div>
-                ))}
-            </div>
+
+                </section>
+            ))}
         </div>
     );
 }

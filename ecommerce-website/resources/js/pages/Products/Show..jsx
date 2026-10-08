@@ -1,28 +1,25 @@
+import { Link } from '@inertiajs/react';
+
 export default function Show({ product }) {
     return (
-        <div className="product-page">
+        <div>
+            <Link href="/products">
+                ← Back to Products
+            </Link>
 
-            <div className="product-image">
-                {product.image ? (
-                    <img
-                        src={product.image}
-                        alt={product.product_name}
-                    />
-                ) : (
-                    <div>No Image</div>
-                )}
-            </div>
-
-            <div className="product-details">
-
-                <p className="category">
-                    {product.category?.category_name}
-                </p>
+            <div>
+                <img
+                    src={`/storage/${product.image}`}
+                    alt={product.product_name}
+                    width="400"
+                />
 
                 <h1>{product.product_name}</h1>
 
-                <p className="description">
-                    {product.description}
+                <p>{product.description}</p>
+
+                <p>
+                    Category: {product.category?.name}
                 </p>
 
                 <h2>
@@ -30,25 +27,13 @@ export default function Show({ product }) {
                 </h2>
 
                 <p>
-                    {product.current_stock > 0
-                        ? `${product.current_stock} available`
-                        : "Out of stock"}
+                    Stock: {product.current_stock}
                 </p>
 
-                <div className="quantity">
-                    <button>-</button>
-                    <span>1</span>
-                    <button>+</button>
-                </div>
-
-                <button
-                    disabled={product.current_stock === 0}
-                >
-                    Add to Cart
-                </button>
-
+                <Link href={`/products/${product.id}/edit`}>
+                    Edit Product
+                </Link>
             </div>
-
         </div>
     );
 }
